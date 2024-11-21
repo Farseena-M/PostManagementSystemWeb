@@ -1,5 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { createPost } from '../api/apis';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePost = () => {
     const [title, setTitle] = useState('');
@@ -7,6 +10,8 @@ const CreatePost = () => {
     const [images, setImages] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
     const imageInputRef = useRef(null);
+    const [showEmoji, setShowEmoji] = useState(false)
+    const Nvgt = useNavigate();
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
@@ -25,6 +30,10 @@ const CreatePost = () => {
         setSelectedImages(updatedSelectedImages);
     };
 
+    const handleEmojiSelect = (emoji) => {
+        setDescription((prevDescription) => prevDescription + emoji.native);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -36,6 +45,7 @@ const CreatePost = () => {
         });
 
         await createPost(formData);
+        Nvgt('/')
         setTitle('');
         setDescription('');
         setImages([]);
@@ -91,16 +101,36 @@ const CreatePost = () => {
 
                     <div>
                         <label htmlFor="description" className="block text-sm font-medium text-gray-600">Description</label>
-                        <textarea
-                            id="description"
-                            placeholder="Write your post description here"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                            className="w-full mt-1 px-4 py-2 h-32 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        />
+                        <div className="relative">
+                            <textarea
+                                id="description"
+                                placeholder="Write your post description here"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                required
+                                className="w-full mt-1 px-4 py-2 h-32 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                            />
+                            <button
+                                type="button"
+                                className="absolute top-2 right-2 text-lg text-yellow-600 hover:text-yellow-800"
+                                onClick={() => setShowEmoji((prev) => !prev)}
+                            >
+                                🙂
+                            </button>
+                            {showEmoji && (
+                                <div
+                                    className="absolute bottom-full right-0 mb-2 z-50"
+                                    style={{ transform: "scale(0.8)", transformOrigin: "top right", bottom: '3rem' }}
+                                >
+                                    <Picker
+                                        data={data}
+                                        onEmojiSelect={handleEmojiSelect}
+                                        theme="dark"
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
-
                     <button
                         type="submit"
                         className="w-full bg-yellow-700 text-white py-2 px-4 rounded-lg font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 font-serif"
