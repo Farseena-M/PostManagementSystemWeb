@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { deletePost, fetchPosts } from '../api/apis';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaEdit, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const PostList = () => {
@@ -21,6 +21,11 @@ const PostList = () => {
 
     const handleCreatePost = () => {
         Nvgt('/create')
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        Nvgt('/');
     };
 
     const toggleReadMore = (id) => {
@@ -74,9 +79,16 @@ const PostList = () => {
 
             <button
                 onClick={handleCreatePost}
-                className="fixed bottom-10 right-10 bg-yellow-500 text-black rounded-full p-4 shadow-lg hover:bg-yellow-400 transition duration-300 transform hover:scale-110 z-50"
+                className="fixed bottom-32 right-10 bg-yellow-500 text-black rounded-full p-4 shadow-lg hover:bg-yellow-400 transition duration-300 transform hover:scale-110 z-50"
             >
                 <FaPlus size={24} />
+            </button>
+
+            <button
+                onClick={handleLogout}
+                className="fixed bottom-10 right-10 bg-red-500 text-white rounded-full p-4 shadow-lg hover:bg-red-400 transition duration-300 transform hover:scale-110 z-50"
+            >
+                <FaSignOutAlt size={24} />
             </button>
         </div>
     );

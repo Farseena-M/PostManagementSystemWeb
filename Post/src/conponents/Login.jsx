@@ -1,24 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const Nvgt = useNavigate();
+    const url = import.meta.env.VITE_API_URL
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/posts');
+        setLoading(true);
+        setErrorMessage('');
+        setSuccessMessage('');
+
+        try {
+            const response = await axios.post(`${url}/login`, { email, password });
+
+            localStorage.setItem('token', response.data.token);
+            setSuccessMessage('Login successful!');
+            Nvgt('/posts');
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+            setErrorMessage(errorMessage);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSignup = () => {
-        navigate('/signup');
+        Nvgt('/signup');
     };
 
     return (
         <div className="min-h-screen bg-yellow-700 flex items-center justify-center">
             <div className="w-full max-w-md mx-auto shadow-md rounded-lg p-8 mt-10 bg-black">
                 <h2 className="text-4xl font-semibold text-center text-yellow-800 mb-6 font-serif">Login</h2>
+                {errorMessage && (
+                    <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+                )}
+                {successMessage && (
+                    <p className="text-green-500 text-center mb-4">{successMessage}</p>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
@@ -46,9 +72,11 @@ const Login = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-yellow-700 text-white py-2 px-4 rounded-lg font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 font-serif"
+                        disabled={loading}
+                        className={`w-full py-2 px-4 rounded-lg font-medium ${loading ? 'bg-gray-500' : 'bg-yellow-700 hover:bg-yellow-600'
+                            } text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 font-serif`}
                     >
-                        Login
+                        {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
 
