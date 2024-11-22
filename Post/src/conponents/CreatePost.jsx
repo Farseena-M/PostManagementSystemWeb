@@ -45,7 +45,7 @@ const CreatePost = () => {
         });
 
         await createPost(formData);
-        Nvgt('/')
+        Nvgt('/posts')
         setTitle('');
         setDescription('');
         setImages([]);

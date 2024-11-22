@@ -5,7 +5,8 @@ import data from '@emoji-mart/data';
 import { getPost, updatePost } from '../api/apis';
 
 const EditPost = () => {
-    const { postId } = useParams();
+    const { id } = useParams();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [images, setImages] = useState([]);
@@ -17,18 +18,21 @@ const EditPost = () => {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const post = await getPost(postId);
-                setTitle(post.title);
-                setDescription(post.description);
-                setImages(post.images);
-                setSelectedImages(post.images.map(img => URL.createObjectURL(img)));
+                const response = await getPost(id);
+                const post = response?.data;
+                setTitle(post?.title || '');
+                setDescription(post?.description || '');
+                const postImages = post?.images || [];
+                setImages(postImages);
+                setSelectedImages(postImages);
             } catch (err) {
                 console.error('Error fetching post:', err);
             }
         };
 
         fetchPostData();
-    }, [postId]);
+    }, [id]);
+
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
@@ -62,8 +66,8 @@ const EditPost = () => {
         });
 
         try {
-            await updatePost(postId, formData);
-            Nvgt('/');
+            await updatePost(id, formData);
+            Nvgt('/posts');
         } catch (err) {
             console.error('Error updating post:', err);
         }
