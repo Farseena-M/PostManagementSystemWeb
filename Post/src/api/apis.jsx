@@ -16,8 +16,8 @@ API.interceptors.request.use(
     }
 );
 
-export const fetchPosts = () => API.get('/all-posts');
-export const createPost = (postData) => API.post('/create', postData);
-export const getPost = (id) => API.get(`/fetch/${id}`);
-export const updatePost = (id, postData) => API.patch(`/${id}`, postData);
-export const deletePost = (id) => API.delete(`/${id}`);
+export const fetchPosts = () => API.get('/posts/all-posts');
+export const createPost = (postData) => API.post('/posts/create', postData);
+export const getPost = (id) => API.get(`/posts/fetch/${id}`);
+export const updatePost = (id, postData) => API.patch(`/posts/${id}`, postData);
+export const deletePost = (id) => API.delete(`/posts/${id}`);

@@ -18,7 +18,7 @@ const Login = () => {
         setSuccessMessage('');
 
         try {
-            const response = await axios.post(`${url}/login`, { email, password });
+            const response = await axios.post(`${url}/posts/login`, { email, password });
 
             localStorage.setItem('token', response.data.token);
             setSuccessMessage('Login successful!');

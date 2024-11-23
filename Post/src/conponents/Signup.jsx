@@ -10,12 +10,14 @@ const Signup = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const Nvgt = useNavigate();
     const url = import.meta.env.VITE_API_URL
+    console.log(url);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/signup`, {
+            const response = await axios.post(`${url}/posts/signup`, {
                 username,
                 email,
                 password,
