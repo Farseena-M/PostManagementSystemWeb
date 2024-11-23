@@ -9,7 +9,6 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const Nvgt = useNavigate();
-    const url = import.meta.env.VITE_API_URL
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,7 +17,7 @@ const Login = () => {
         setSuccessMessage('');
 
         try {
-            const response = await axios.post(`${url}/posts/login`, { email, password });
+            const response = await axios.post(`https://postmanagementsystemrestapi.onrender.com/posts/login`, { email, password });
 
             localStorage.setItem('token', response.data.token);
             setSuccessMessage('Login successful!');

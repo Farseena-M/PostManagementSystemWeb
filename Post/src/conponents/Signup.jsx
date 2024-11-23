@@ -9,15 +9,13 @@ const Signup = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const Nvgt = useNavigate();
-    const url = import.meta.env.VITE_API_URL
-    console.log(url);
     
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${url}/posts/signup`, {
+            const response = await axios.post(`https://postmanagementsystemrestapi.onrender.com/posts/signup`, {
                 username,
                 email,
                 password,
